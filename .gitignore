@@ -1,0 +1,5 @@
+.nuxt/
+.vscode/
+.output/
+node_modules/
+public_html/tools/*
