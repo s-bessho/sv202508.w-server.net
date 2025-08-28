@@ -11,13 +11,21 @@ export default defineEventHandler(async () => {
   // ディレクトリのみ抽出し、URL を付与
   const tools = entries
     .filter(entry => entry.isDirectory())
-    .map(entry => ({
-      name: entry.name,
-      url: `/tools/${entry.name}/`
-    }));
+    .map(entry => {
+      let url;
+      if(entry.name === 'postfixadmin'){
+        url = `/tools/${entry.name}/public`;
+      }else{
+        url = `/tools/${entry.name}/`;
+      }
+      return{
+        name: entry.name,
+        url: url
+      }
+    });
 		tools.push({
-			name: 'manual-tool',
-			url: '/tools/manual-tool/'
+			name: 'php-info',
+			url: '/tools/info.php'
 		});
 
   return { tools };

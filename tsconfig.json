@@ -1,7 +1,18 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "Bundler",
     "types": ["node"]
   },
-  "include": ["nuxt.config.ts", "server", "pages", "components", "app.vue"]
+  "include": [
+    "nuxt.config.ts",
+    "app.vue",
+    "pages",
+    "components",
+    "composables",
+    "plugins",
+    "server",
+    ".nuxt"
+  ]
 }

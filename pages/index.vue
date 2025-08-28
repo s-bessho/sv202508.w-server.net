@@ -1,32 +1,46 @@
+<!-- pages/index.vue -->
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useFetch } from 'nuxt/app'
-interface ToolsData {
-  tools: string[];
-}
-const { data, pending, error } = await useFetch<ToolsData>('/api/tools', {
+import type { ToolsData } from '~/types/tools'
+import type { ServerInfo } from '~/types/server'
+const { data: toolsData, pending: toolsPending, error: toolsError } = await useFetch<ToolsData>('/api/tools', {
   default: () => ({ tools: [] })
-})
-console.log('Data:', data.value);
-const test  = ref('test2');
+});
+const { data: serverData, pending: serverPending, error: serverError } = await useFetch<ServerInfo>('/api/server.info');
 </script>
 
-<!-- pages/index.vue -->
 <template>
-  <main style="padding:24px">
-    <h1>Hello Nuxt</h1>
-
-    <div v-if="pending">読み込み中…</div>
-    <div v-else-if="error">読み込みエラー</div>
-    <div v-else-if="data">
-      
-      <ul>
-        <li v-for="(tool, index) in data.tools" :key="index">
-          <p>Name: {{ tool.name }}</p>
-          <p>URL: <a :href="tool.url" target="_blank">{{ tool.url }}</a></p>
-        </li>
-      </ul>
+  <section class="contents">
+    <h2>サーバー情報</h2>
+    <div class="contents_data">
+      <div v-if="serverPending">読み込み中…</div>
+      <div v-else-if="serverError">サーバー情報の読み込みエラー</div>
+      <div v-else-if="serverData">
+        <p>Server Name: {{ serverData.serverIP }}</p>
+        <p>Status: {{ serverData.status }}</p>
+        <p>nodeVersion: {{ serverData.nodeVersion }}</p>
+        <p>platform: {{ serverData.platform }}</p>
+        <p>arch: {{ serverData.arch }}</p>
+        <p>memoryUsage: {{ serverData.memoryUsage }}</p>
+        <p>uptime: {{ serverData.uptime }}</p>
+        <p>timestamp: {{ serverData.timestamp }}</p>
+      </div>
     </div>
-    
-  </main>
+  </section>
+  <section class="contents">
+    <h2>Tools</h2>
+    <div class="contents_data">
+      <div v-if="toolsPending">読み込み中…</div>
+      <div v-else-if="toolsError">読み込みエラー</div>
+      <div v-else-if="toolsData">
+        <ul>
+          <li v-for="(tool, index) in toolsData.tools" :key="index">
+            <a :href="tool.url" target="_blank">{{ tool.name }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </template>
